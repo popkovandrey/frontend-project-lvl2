@@ -1,3 +1,4 @@
+/* eslint no-undef: 0 */
 import fs from 'fs';
 import gendiff from '../src';
 
@@ -6,4 +7,4 @@ test('gendiff', () => {
     .toBe(fs.readFileSync('./__fixtures__/result_ba.txt', 'utf8'));
   expect(gendiff('./__fixtures__/after.json', './__fixtures__/before.json'))
     .toBe(fs.readFileSync('./__fixtures__/result_ab.txt', 'utf8'));
-})
+});

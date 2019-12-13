@@ -7,7 +7,7 @@ export default (first, second, format) => {
   // console.log(`first = ${first}, second = ${second}, format = ${format}`);
   const data1 = JSON.parse(fs.readFileSync(first));
   const data2 = JSON.parse(fs.readFileSync(second));
-  
+
   const arr = Object.entries(data1).reduce((acc, [key, value]) => {
     if (_.has(data2, key)) {
       if (data1[key] === data2[key]) {
