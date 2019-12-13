@@ -1,9 +1,9 @@
 {
-  "name": "frontend-project-lvl2-paa",
-  "version": "1.0.0",
+  "name": "gendiff-paa",
+  "version": "0.0.1",
   "description": "my second project on Hexlet",
   "bin": {
-    "gendiff": "dist/bin/run.js"
+    "gendiff": "dist/bin/gendiff.js"
   },
   "files": [
     "dist"
@@ -38,9 +38,11 @@
     "@babel/node": "^7.7.4",
     "@babel/preset-env": "^7.7.6",
     "babel-eslint": "^10.0.3",
+    "babel-jest": "^24.9.0",
     "eslint": "^6.7.2",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-babel": "^5.3.0",
-    "eslint-plugin-import": "^2.19.1"
+    "eslint-plugin-import": "^2.19.1",
+    "jest": "^24.9.0"
   }
 }
