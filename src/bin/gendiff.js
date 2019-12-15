@@ -5,10 +5,9 @@ import gendiff from '..';
 commander
   .version('0.0.1')
   .description('Compares two configuration files and shows a difference.')
-  .option('-f, --format [INI, JSON]', 'Output format file', 'JSON')
+  .option('-f, --format [ini, json, yaml]', 'Output format file', 'json')
   .arguments('<first> <second>')
-  .action((f, s) => {
-    console.log(gendiff(f, s, commander.format));
-    // readFile(f);
+  .action((first, second) => {
+    console.log(gendiff(first, second, commander.format));
   })
   .parse(process.argv);

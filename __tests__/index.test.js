@@ -2,9 +2,21 @@
 import fs from 'fs';
 import gendiff from '../src';
 
-test('gendiff', () => {
-  expect(gendiff('./__fixtures__/before.json', './__fixtures__/after.json'))
-    .toBe(fs.readFileSync('./__fixtures__/result_ba.txt', 'utf8'));
-  expect(gendiff('./__fixtures__/after.json', './__fixtures__/before.json'))
-    .toBe(fs.readFileSync('./__fixtures__/result_ab.txt', 'utf8'));
+const path = './__tests__/__fixtures__/';
+
+const resBeforeAfter = fs.readFileSync(`${path}resBeforeAfter.txt`, 'utf8');
+const resAfterBefore = fs.readFileSync(`${path}resAfterBefore.txt`, 'utf8');
+
+test('gendiff json', () => {
+  expect(gendiff(`${path}before.json`, `${path}after.json`, 'json'))
+    .toBe(resBeforeAfter);
+  expect(gendiff(`${path}after.json`, `${path}before.json`, 'json'))
+    .toBe(resAfterBefore);
+});
+
+test('gendiff yaml', () => {
+  expect(gendiff(`${path}before.yml`, `${path}after.yml`, 'yaml'))
+    .toBe(resBeforeAfter);
+  expect(gendiff(`${path}after.yml`, `${path}before.yml`, 'yaml'))
+    .toBe(resAfterBefore);
 });
