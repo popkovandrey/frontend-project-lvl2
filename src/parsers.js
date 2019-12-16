@@ -23,9 +23,31 @@ const diffTwoObjects = (data1, data2) => {
   return `${[...arr2, '}'].join('\n')}`;
 };
 
+const diff = (data1, data2) => {
+  const iter = (obj, path) => {
+    return Object.entries(obj).map(([key, value]) => {
+      if ((value instanceof Object) && Object.keys(value).length > 1) {
+        return {name: key, before: '', after: '',  children: [iter(value, `${path}${key}.`)]}
+      } else {
+        return {name: key, 
+                before: value, 
+                after: _.has(data2, `${path}${key}`) ? _.get(data2, `${path}${key}`) : '', 
+                children: []}
+      }
+    })
+  }
+  console.log(iter(data1, '')[1].children[0]);
+
+};
+
 export const parseJSON = (file1, file2) => {
   const data1 = JSON.parse(fs.readFileSync(file1));
   const data2 = JSON.parse(fs.readFileSync(file2));
+
+  console.log(data1);
+  console.log(data2);
+
+  diff(data1, data2);
 
   return diffTwoObjects(data1, data2);
 };
