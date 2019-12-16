@@ -20,8 +20,8 @@ const diffTwoObjects = (data1, data2) => {
   const arr2 = Object.entries(data2)
     .reduce((acc, [key, value]) => (!_.has(data1, key) ? [...acc, `+ ${key}: ${value}`] : acc), arr);
 
-  return `${[...arr2, '}'].join('\n')}`; 
-}
+  return `${[...arr2, '}'].join('\n')}`;
+};
 
 export const parseJSON = (file1, file2) => {
   const data1 = JSON.parse(fs.readFileSync(file1));
@@ -38,8 +38,8 @@ export const parseYAML = (file1, file2) => {
 };
 
 export const parseINI = (file1, file2) => {
-    const data1 = ini.parse(fs.readFileSync(file1, 'utf8'));
-    const data2 = ini.parse(fs.readFileSync(file2, 'utf8'));
+  const data1 = ini.parse(fs.readFileSync(file1, 'utf8'));
+  const data2 = ini.parse(fs.readFileSync(file2, 'utf8'));
 
-    return diffTwoObjects(data1, data2);;
-  };
+  return diffTwoObjects(data1, data2);
+};
