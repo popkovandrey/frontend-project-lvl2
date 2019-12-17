@@ -23,33 +23,35 @@ const diffTwoObjects = (data1, data2) => {
   return `${[...arr2, '}'].join('\n')}`;
 };
 
-const diff = (data1, data2) => {
-  const iter = (obj, path) => {
-    return Object.entries(obj).map(([key, value]) => {
-      if ((value instanceof Object) && Object.keys(value).length > 1) {
-        return {name: key, before: '', after: '',  children: [iter(value, `${path}${key}.`)]}
-      } else {
-        return {name: key, 
-                before: value, 
-                after: _.has(data2, `${path}${key}`) ? _.get(data2, `${path}${key}`) : '', 
-                children: []}
-      }
-    })
-  }
-  console.log(iter(data1, '')[1].children[0]);
 
-};
+const buildDiffAST = (data1, data2) => {
+  const keys = Object.keys(data1);
+  const keys2 = Object.keys(data2);
+
+  return _.union(keys, keys2).map(key => {
+    if (_.has(data2, key) && (data1[key] instanceof Object) && (data2[key] instanceof Object)) {
+      return {  name: key,
+                before: '',
+                after: '',
+                children: buildDiffAST(data1[key], data2[key]) }
+    } else {
+      return {  name: key,
+                before: data1[key] || '',
+                after: data2[key] || '',
+                children: {}  }
+    }
+  });
+}
 
 export const parseJSON = (file1, file2) => {
   const data1 = JSON.parse(fs.readFileSync(file1));
   const data2 = JSON.parse(fs.readFileSync(file2));
 
-  console.log(data1);
-  console.log(data2);
+  //console.log(data1);
+  //console.log(data2);
 
-  diff(data1, data2);
-
-  return diffTwoObjects(data1, data2);
+  //return diffTwoObjects(data1, data2);
+  return buildDiffAST(data1, data2);
 };
 
 export const parseYAML = (file1, file2) => {
