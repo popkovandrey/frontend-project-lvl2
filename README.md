@@ -8,3 +8,6 @@
 
 ### Пример работы (парсинг ini)
 [![asciicast](https://asciinema.org/a/288418.svg)](https://asciinema.org/a/288418)
+
+### Пример парсинга вложенных файлов (рекурсивно)
+[![asciicast](https://asciinema.org/a/288978.svg)](https://asciinema.org/a/288978)
