@@ -6,3 +6,5 @@
 ### Пример работы (-f plain|tree)
 [![asciicast](https://asciinema.org/a/289149.svg)](https://asciinema.org/a/289149)
 
+### Пример работы (-f plain|tree|json)
+[![asciicast](https://asciinema.org/a/289183.svg)](https://asciinema.org/a/289183)

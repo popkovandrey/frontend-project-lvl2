@@ -8,6 +8,8 @@ const resTreeBeforeAfter = fs.readFileSync(`${path}resTreeBeforeAfter.txt`, 'utf
 const resTreeAfterBefore = fs.readFileSync(`${path}resTreeAfterBefore.txt`, 'utf8');
 const resPlainBeforeAfter = fs.readFileSync(`${path}resPlainBeforeAfter.txt`, 'utf8');
 const resPlainAfterBefore = fs.readFileSync(`${path}resPlainAfterBefore.txt`, 'utf8');
+const resJSONBeforeAfter = fs.readFileSync(`${path}resBeforeAfter.json`, 'utf8');
+const resJSONAfterBefore = fs.readFileSync(`${path}resAfterBefore.json`, 'utf8');
 
 test.each([
   [`${path}before.json`, `${path}after.json`, 'tree', resTreeBeforeAfter],
@@ -22,6 +24,8 @@ test.each([
   [`${path}after.yml`, `${path}before.yml`, 'plain', resPlainAfterBefore],
   [`${path}before.ini`, `${path}after.ini`, 'plain', resPlainBeforeAfter],
   [`${path}after.ini`, `${path}before.ini`, 'plain', resPlainAfterBefore],
+  [`${path}before.json`, `${path}after.json`, 'json', resJSONBeforeAfter],
+  [`${path}after.json`, `${path}before.json`, 'json', resJSONAfterBefore],
 ])('gendiff(%s, %s, %s)', (a, b, c, expected) => {
   expect(gendiff(a, b, c)).toBe(expected);
 });

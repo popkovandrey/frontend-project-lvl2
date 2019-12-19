@@ -25,7 +25,7 @@ const diffTwoObjects = (data1, data2) => {
   return `${[...arr2, '}'].join('\n')}`;
 };
 
-const buildDiffAST = (data1, data2) => {
+const buildDiffAST = (data1, data2, parentName = '') => {
   const keys = Object.keys(data1);
   const keys2 = Object.keys(data2);
 
@@ -33,10 +33,11 @@ const buildDiffAST = (data1, data2) => {
     if (_.has(data2, key) && (data1[key] instanceof Object) && (data2[key] instanceof Object)) {
       return {
         name: key,
+        fullName: `${parentName}${key}`,
         type: '',
         before: '',
         after: '',
-        children: buildDiffAST(data1[key], data2[key]),
+        children: buildDiffAST(data1[key], data2[key], `${parentName}${key}.`),
       };
     } else {
       const beforeValue = data1[key] === undefined ? '' : data1[key];
@@ -54,7 +55,7 @@ const buildDiffAST = (data1, data2) => {
       }
 
       return {
-        name: key, type: typeValue, before: beforeValue, after: afterValue, children: {},
+        name: key, fullName: `${parentName}${key}`, type: typeValue, before: beforeValue, after: afterValue, children: {},
       };
     }
   });

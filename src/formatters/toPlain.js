@@ -1,5 +1,5 @@
-const stringifyValue = (obj, parent) => {
-  const prefix = `Property '${parent}${obj.name}' was `;
+const stringifyValue = (obj) => {
+  const prefix = `Property '${obj.fullName}' was `;
 
   let beforeValue = obj.before;
 
@@ -39,9 +39,9 @@ const stringifyValue = (obj, parent) => {
 };
 
 export default (ast) => {
-  const iter = (obj, acc, parent) => (obj.children instanceof Array
-    ? [...acc, ...obj.children.reduce((iAcc, el) => iter(el, iAcc, `${parent}${obj.name}.`), [])]
-    : [...acc, stringifyValue(obj, parent)]);
+  const iter = (obj, acc) => (obj.children instanceof Array
+    ? [...acc, ...obj.children.reduce((iAcc, el) => iter(el, iAcc), [])]
+    : [...acc, stringifyValue(obj)]);
 
-  return [...ast.reduce((acc, obj) => iter(obj, acc, ''), [])].join('\n');
+  return [...ast.reduce((acc, obj) => iter(obj, acc), [])].join('\n');
 };
