@@ -2,13 +2,13 @@ install:
 	npm install
 
 json:
-	npx babel-node src/bin/gendiff.js ./__tests__/__fixtures__/before.json ./__tests__/__fixtures__/after.json -f json
+	npx babel-node src/bin/gendiff.js ./__tests__/__fixtures__/before.json ./__tests__/__fixtures__/after.json -f plain
 
 yaml:
-	npx babel-node src/bin/gendiff.js ./__tests__/__fixtures__/before.yml ./__tests__/__fixtures__/after.yml -f yaml
+	npx babel-node src/bin/gendiff.js ./__tests__/__fixtures__/before.yml ./__tests__/__fixtures__/after.yml
 
 ini:
-	npx babel-node src/bin/gendiff.js ./__tests__/__fixtures__/before.ini ./__tests__/__fixtures__/after.ini -f ini
+	npx babel-node src/bin/gendiff.js ./__tests__/__fixtures__/before.ini ./__tests__/__fixtures__/after.ini
 
 
 publish:

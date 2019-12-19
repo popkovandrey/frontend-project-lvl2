@@ -1,9 +1,3 @@
-import { parseJSON, parseYAML, parseINI } from './parsers';
+import render from './formatters';
 
-const mapping = {
-  json: parseJSON,
-  yaml: parseYAML,
-  ini: parseINI,
-};
-
-export default (file1, file2, format) => mapping[format](file1, file2);
+export default (file1, file2, format) => render(file1, file2, format);
