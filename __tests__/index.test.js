@@ -26,6 +26,10 @@ test.each([
   [`${path}after.ini`, `${path}before.ini`, 'plain', resPlainAfterBefore],
   [`${path}before.json`, `${path}after.json`, 'json', resJSONBeforeAfter],
   [`${path}after.json`, `${path}before.json`, 'json', resJSONAfterBefore],
+  [`${path}before.yml`, `${path}after.yml`, 'json', resJSONBeforeAfter],
+  [`${path}after.yml`, `${path}before.yml`, 'json', resJSONAfterBefore],
+  [`${path}before.ini`, `${path}after.ini`, 'json', resJSONBeforeAfter],
+  [`${path}after.ini`, `${path}before.ini`, 'json', resJSONAfterBefore],
 ])('gendiff(%s, %s, %s)', (a, b, c, expected) => {
   expect(gendiff(a, b, c)).toBe(expected);
 });
