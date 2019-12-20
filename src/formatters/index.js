@@ -9,4 +9,4 @@ const mappingRender = {
   json: renderToJSON,
 };
 
-export default (fil1, file2, format) => mappingRender[format](parse(fil1, file2));
+export default (file1, file2, format) => mappingRender[format](parse(file1, file2));
