@@ -1,7 +1,7 @@
 import renderToTree from './toTree';
 import renderToPlain from './toPlain';
 import renderToJSON from './toJSON';
-import parse from '../parsers';
+import getDiffAST from '../parsers';
 
 const mappingRender = {
   tree: renderToTree,
@@ -9,4 +9,4 @@ const mappingRender = {
   json: renderToJSON,
 };
 
-export default (file1, file2, format) => mappingRender[format](parse(file1, file2));
+export default (file1, file2, format) => mappingRender[format](getDiffAST(file1, file2));

@@ -3,33 +3,39 @@ import fs from 'fs';
 import gendiff from '../src';
 
 const path = './__tests__/__fixtures__/';
+let resTreeBeforeAfter;
+let resPlainBeforeAfter;
+let resJSONBeforeAfter;
 
-const resTreeBeforeAfter = fs.readFileSync(`${path}resTreeBeforeAfter.txt`, 'utf8');
-const resTreeAfterBefore = fs.readFileSync(`${path}resTreeAfterBefore.txt`, 'utf8');
-const resPlainBeforeAfter = fs.readFileSync(`${path}resPlainBeforeAfter.txt`, 'utf8');
-const resPlainAfterBefore = fs.readFileSync(`${path}resPlainAfterBefore.txt`, 'utf8');
-const resJSONBeforeAfter = fs.readFileSync(`${path}resBeforeAfter.json`, 'utf8');
-const resJSONAfterBefore = fs.readFileSync(`${path}resAfterBefore.json`, 'utf8');
+beforeEach(() => {
+  resTreeBeforeAfter = fs.readFileSync(`${path}resTreeBeforeAfter.txt`, 'utf8');
+  resPlainBeforeAfter = fs.readFileSync(`${path}resPlainBeforeAfter.txt`, 'utf8');
+  resJSONBeforeAfter = fs.readFileSync(`${path}resBeforeAfter.json`, 'utf8');
+});
 
 test.each([
-  [`${path}before.json`, `${path}after.json`, 'tree', resTreeBeforeAfter],
-  [`${path}after.json`, `${path}before.json`, 'tree', resTreeAfterBefore],
-  [`${path}before.yml`, `${path}after.yml`, 'tree', resTreeBeforeAfter],
-  [`${path}after.yml`, `${path}before.yml`, 'tree', resTreeAfterBefore],
-  [`${path}before.ini`, `${path}after.ini`, 'tree', resTreeBeforeAfter],
-  [`${path}after.ini`, `${path}before.ini`, 'tree', resTreeAfterBefore],
-  [`${path}before.json`, `${path}after.json`, 'plain', resPlainBeforeAfter],
-  [`${path}after.json`, `${path}before.json`, 'plain', resPlainAfterBefore],
-  [`${path}before.yml`, `${path}after.yml`, 'plain', resPlainBeforeAfter],
-  [`${path}after.yml`, `${path}before.yml`, 'plain', resPlainAfterBefore],
-  [`${path}before.ini`, `${path}after.ini`, 'plain', resPlainBeforeAfter],
-  [`${path}after.ini`, `${path}before.ini`, 'plain', resPlainAfterBefore],
-  [`${path}before.json`, `${path}after.json`, 'json', resJSONBeforeAfter],
-  [`${path}after.json`, `${path}before.json`, 'json', resJSONAfterBefore],
-  [`${path}before.yml`, `${path}after.yml`, 'json', resJSONBeforeAfter],
-  [`${path}after.yml`, `${path}before.yml`, 'json', resJSONAfterBefore],
-  [`${path}before.ini`, `${path}after.ini`, 'json', resJSONBeforeAfter],
-  [`${path}after.ini`, `${path}before.ini`, 'json', resJSONAfterBefore],
-])('gendiff(%s, %s, %s)', (a, b, c, expected) => {
-  expect(gendiff(a, b, c)).toBe(expected);
+  [`${path}before.json`, `${path}after.json`, 'tree'],
+  [`${path}before.yml`, `${path}after.yml`, 'tree'],
+  [`${path}before.ini`, `${path}after.ini`, 'tree'],
+  [`${path}before.json`, `${path}after.json`, 'plain'],
+  [`${path}before.yml`, `${path}after.yml`, 'plain'],
+  [`${path}before.ini`, `${path}after.ini`, 'plain'],
+  [`${path}before.json`, `${path}after.json`, 'json'],
+  [`${path}before.yml`, `${path}after.yml`, 'json'],
+  [`${path}before.ini`, `${path}after.ini`, 'json'],
+])('gendiff(%s, %s, %s)', (filePath1, filePath2, format) => {
+  switch (format) {
+    case 'tree':
+      expect(gendiff(filePath1, filePath2, format)).toBe(resTreeBeforeAfter);
+      break;
+    case 'plain':
+      expect(gendiff(filePath1, filePath2, format)).toBe(resPlainBeforeAfter);
+      break;
+    case 'json':
+      expect(gendiff(filePath1, filePath2, format)).toBe(resJSONBeforeAfter);
+      break;
+
+    default:
+      break;
+  }
 });
