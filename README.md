@@ -18,7 +18,7 @@
 
 ## Установка пакета:
 ```sh
-user:~$ npm install frontend-project-lvl2-paa --save
+user:~$ npm install gendiff-paa --save
 ```
 
 ## Запуск
