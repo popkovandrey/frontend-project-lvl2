@@ -25,3 +25,7 @@ cover:
 
 watch:
 	npx jest --watch
+
+check:
+	npx eslint .
+	npx jest .

@@ -24,18 +24,11 @@ test.each([
   [`${path}before.yml`, `${path}after.yml`, 'json'],
   [`${path}before.ini`, `${path}after.ini`, 'json'],
 ])('gendiff(%s, %s, %s)', (filePath1, filePath2, format) => {
-  switch (format) {
-    case 'tree':
-      expect(gendiff(filePath1, filePath2, format)).toBe(resTreeBeforeAfter);
-      break;
-    case 'plain':
-      expect(gendiff(filePath1, filePath2, format)).toBe(resPlainBeforeAfter);
-      break;
-    case 'json':
-      expect(gendiff(filePath1, filePath2, format)).toBe(resJSONBeforeAfter);
-      break;
+  const mappingResult = {
+    tree: resTreeBeforeAfter,
+    plain: resPlainBeforeAfter,
+    json: resJSONBeforeAfter,
+  };
 
-    default:
-      break;
-  }
+  expect(gendiff(filePath1, filePath2, format)).toBe(mappingResult[format]);
 });
