@@ -14,21 +14,22 @@ beforeEach(() => {
 });
 
 test.each([
-  [`${path}before.json`, `${path}after.json`, 'tree'],
-  [`${path}before.yml`, `${path}after.yml`, 'tree'],
-  [`${path}before.ini`, `${path}after.ini`, 'tree'],
-  [`${path}before.json`, `${path}after.json`, 'plain'],
-  [`${path}before.yml`, `${path}after.yml`, 'plain'],
-  [`${path}before.ini`, `${path}after.ini`, 'plain'],
-  [`${path}before.json`, `${path}after.json`, 'json'],
-  [`${path}before.yml`, `${path}after.yml`, 'json'],
-  [`${path}before.ini`, `${path}after.ini`, 'json'],
-])('gendiff(%s, %s, %s)', (filePath1, filePath2, format) => {
-  const mappingResult = {
+  ['json', 'tree'],
+  ['yml', 'tree'],
+  ['ini', 'tree'],
+  ['json', 'plain'],
+  ['yml', 'plain'],
+  ['ini', 'plain'],
+  ['json', 'json'],
+  ['yml', 'json'],
+  ['ini', 'json'],
+])('gendiff(%s, %s, %s)', (extentionFile, outputFormat) => {
+  const mappingFormat = {
     tree: resTreeBeforeAfter,
     plain: resPlainBeforeAfter,
     json: resJSONBeforeAfter,
   };
 
-  expect(gendiff(filePath1, filePath2, format)).toBe(mappingResult[format]);
+  expect(gendiff(`${path}before.${extentionFile}`, `${path}after.${extentionFile}`, outputFormat))
+    .toBe(mappingFormat[outputFormat]);
 });
