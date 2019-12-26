@@ -23,13 +23,13 @@ test.each([
   ['json', 'json'],
   ['yml', 'json'],
   ['ini', 'json'],
-])('gendiff(%s, %s, %s)', (extentionFile, outputFormat) => {
+])('gendiff(%s, %s)', (fileExtention, outputFormat) => {
   const mappingFormat = {
     tree: resTreeBeforeAfter,
     plain: resPlainBeforeAfter,
     json: resJSONBeforeAfter,
   };
 
-  expect(gendiff(`${path}before.${extentionFile}`, `${path}after.${extentionFile}`, outputFormat))
+  expect(gendiff(`${path}before.${fileExtention}`, `${path}after.${fileExtention}`, outputFormat))
     .toBe(mappingFormat[outputFormat]);
 });
