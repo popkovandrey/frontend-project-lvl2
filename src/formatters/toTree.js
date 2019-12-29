@@ -13,7 +13,7 @@ const stringifyValue = (obj, depthIdent) => {
     unchanged: prepareValue(obj.name, obj.value, ident, '  '),
     added: prepareValue(obj.name, obj.value, ident, '+ '),
     removed: prepareValue(obj.name, obj.value, ident, '- '),
-    changed: [...prepareValue(obj.name, obj.value.before, ident, '- '), ...prepareValue(obj.name, obj.value.after, ident, '+ ')],
+    changed: [...prepareValue(obj.name, obj.beforeValue, ident, '- '), ...prepareValue(obj.name, obj.afterValue, ident, '+ ')],
   };
 
   return mappingType[obj.type];
@@ -24,7 +24,7 @@ export default (ast) => {
     if (obj.type === 'grouped') {
       return [...acc,
         `${leftIdent.repeat(depthIdent)}${obj.name}: {`,
-        ...obj.value.reduce((iAcc, el) => iter(el, iAcc, depthIdent + 1), []),
+        ...obj.children.reduce((iAcc, el) => iter(el, iAcc, depthIdent + 1), []),
         `${leftIdent.repeat(depthIdent)}}`];
     }
 

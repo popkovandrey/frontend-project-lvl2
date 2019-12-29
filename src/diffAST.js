@@ -41,11 +41,23 @@ const buildDiffAST = (parsedData1, parsedData2) => _.union(
       (item) => item.checkType(parsedData1, parsedData2, key),
     );
 
-    const value = processing(parsedData1[key], parsedData2[key], buildDiffAST);
+    const resultProc = processing(parsedData1[key], parsedData2[key], buildDiffAST);
 
-    return {
-      name: key, type, value,
+    const mappingNode = {
+      grouped: { name: key, type, children: resultProc },
+      added: { name: key, type, value: resultProc },
+      removed: { name: key, type, value: resultProc },
+      changed: {
+        name: key,
+        type,
+        beforeValue: resultProc.before,
+        afterValue: resultProc.after,
+      },
+      unchanged: { name: key, type, value: resultProc },
     };
+
+
+    return mappingNode[type];
   });
 
 export default buildDiffAST;

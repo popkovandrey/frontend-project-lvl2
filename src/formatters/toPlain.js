@@ -6,7 +6,7 @@ const stringifyValue = (obj, fullName) => {
     removed: `Property '${fullName}' was removed`,
     unchanged: `Property '${fullName}' was not changed`,
     added: `Property '${fullName}' was added with value: ${checkComplex(checkString(obj.value))}`,
-    changed: `Property '${fullName}' was updated. From ${checkComplex(checkString(obj.value.before))} to ${checkComplex(checkString(obj.value.after))}`,
+    changed: `Property '${fullName}' was updated. From ${checkComplex(checkString(obj.beforeValue))} to ${checkComplex(checkString(obj.afterValue))}`,
   };
 
   return [mappingType[obj.type]];
@@ -14,7 +14,7 @@ const stringifyValue = (obj, fullName) => {
 
 export default (ast) => {
   const iter = (obj, acc, parent) => (obj.type === 'grouped'
-    ? [...acc, ...obj.value.reduce((iAcc, el) => iter(el, iAcc, `${parent}${obj.name}.`), [])]
+    ? [...acc, ...obj.children.reduce((iAcc, el) => iter(el, iAcc, `${parent}${obj.name}.`), [])]
     : [...acc, stringifyValue(obj, `${parent}${obj.name}`)]);
 
   return [...ast.reduce((acc, obj) => iter(obj, acc, ''), [])].join('\n');

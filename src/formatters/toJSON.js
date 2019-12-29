@@ -1,13 +1,13 @@
 const stringifyValue = (obj, fullName) => {
   const getBeforeValue = {
-    changed: obj.value.before,
+    changed: obj.beforeValue,
     unchanged: obj.value,
     added: '',
     removed: obj.value,
   };
 
   const getAfterValue = {
-    changed: obj.value.after,
+    changed: obj.afterValue,
     unchanged: obj.value,
     added: obj.value,
     removed: '',
@@ -23,7 +23,7 @@ const stringifyValue = (obj, fullName) => {
 
 export default (ast) => {
   const iter = (obj, acc, parent) => (obj.type === 'grouped'
-    ? [...acc, ...obj.value.reduce((iAcc, el) => iter(el, iAcc, `${parent}${obj.name}.`), [])]
+    ? [...acc, ...obj.children.reduce((iAcc, el) => iter(el, iAcc, `${parent}${obj.name}.`), [])]
     : [...acc, stringifyValue(obj, `${parent}${obj.name}`)]);
 
   return JSON.stringify([...ast.reduce((acc, obj) => iter(obj, acc, ''), [])]);
