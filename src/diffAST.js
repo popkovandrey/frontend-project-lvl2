@@ -4,44 +4,47 @@ const listTypes = [
   {
     type: 'grouped',
     checkType: (first, second, key) => (_.isObject(first[key]) && _.isObject(second[key])),
-    getChildren: (first, second, parentName, fun) => fun(first, second, parentName),
+    processing: (first, second, fun) => fun(first, second),
   },
   {
     type: 'added',
     checkType: (first, second, key) => (!_.has(first, key) && _.has(second, key)),
-    getChildren: (first, second) => _.identity(second),
+    processing: (first, second) => _.identity(second),
   },
   {
     type: 'removed',
     checkType: (first, second, key) => (_.has(first, key) && !_.has(second, key)),
-    getChildren: (first) => _.identity(first),
+    processing: (first) => _.identity(first),
   },
   {
     type: 'changed',
     checkType: (first, second, key) => (_.has(first, key) && _.has(second, key)
       && (first[key] !== second[key])),
-    getChildren: (first, second) => ({ before: first, after: second }),
+    processing: (first, second) => ({ before: first, after: second }),
   },
   {
     type: 'unchanged',
     checkType: (first, second, key) => (_.has(first, key) && _.has(second, key)
       && (first[key] === second[key])),
-    getChildren: (first) => _.identity(first),
+    processing: (first) => _.identity(first),
   },
 ];
 
-const buildDiffAST = (parsedData1, parsedData2, parentName = '') => _.union(Object.keys(parsedData1), Object.keys(parsedData2))
+const buildDiffAST = (parsedData1, parsedData2) => _.union(
+  Object.keys(parsedData1),
+  Object.keys(parsedData2),
+)
   .sort()
   .map((key) => {
-    const { type, getChildren } = _.find(
+    const { type, processing } = _.find(
       listTypes,
       (item) => item.checkType(parsedData1, parsedData2, key),
     );
 
-    const value = getChildren(parsedData1[key], parsedData2[key], `${parentName}${key}.`, buildDiffAST);
+    const value = processing(parsedData1[key], parsedData2[key], buildDiffAST);
 
     return {
-      name: key, fullName: `${parentName}${key}`, type, value,
+      name: key, type, value,
     };
   });
 
