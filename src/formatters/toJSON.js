@@ -1,25 +1,10 @@
-const stringifyValue = (obj, fullName) => {
-  const getBeforeValue = {
-    changed: obj.beforeValue,
-    unchanged: obj.value,
-    added: '',
-    removed: obj.value,
-  };
-
-  const getAfterValue = {
-    changed: obj.afterValue,
-    unchanged: obj.value,
-    added: obj.value,
-    removed: '',
-  };
-
-  return {
+const stringifyValue = (obj, fullName) => (
+  {
     name: fullName,
-    status: obj.type,
-    before: getBeforeValue[obj.type],
-    after: getAfterValue[obj.type],
-  };
-};
+    type: obj.type,
+    value: obj.value,
+  }
+);
 
 export default (ast) => {
   const iter = (obj, acc, parent) => (obj.type === 'grouped'

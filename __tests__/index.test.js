@@ -1,4 +1,3 @@
-/* eslint no-undef: 0 */
 import fs from 'fs';
 import gendiff from '../src';
 

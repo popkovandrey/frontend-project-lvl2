@@ -6,7 +6,7 @@ const stringifyValue = (obj, fullName) => {
     removed: `Property '${fullName}' was removed`,
     unchanged: `Property '${fullName}' was not changed`,
     added: `Property '${fullName}' was added with value: ${checkComplex(checkString(obj.value))}`,
-    changed: `Property '${fullName}' was updated. From ${checkComplex(checkString(obj.beforeValue))} to ${checkComplex(checkString(obj.afterValue))}`,
+    changed: `Property '${fullName}' was updated. From ${checkComplex(checkString(obj.value.before))} to ${checkComplex(checkString(obj.value.after))}`,
   };
 
   return [mappingType[obj.type]];
