@@ -4,29 +4,29 @@ const listTypes = [
   {
     type: 'grouped',
     checkType: (first, second, key) => (_.isObject(first[key]) && _.isObject(second[key])),
-    processing: (first, second, fun) => fun(first, second),
+    processing: (first, second, fun) => ({ children: fun(first, second) }),
   },
   {
     type: 'added',
     checkType: (first, second, key) => (!_.has(first, key) && _.has(second, key)),
-    processing: (first, second) => _.identity(second),
+    processing: (first, second) => ({ value: _.identity(second) }),
   },
   {
     type: 'removed',
     checkType: (first, second, key) => (_.has(first, key) && !_.has(second, key)),
-    processing: (first) => _.identity(first),
+    processing: (first) => ({ value: _.identity(first) }),
   },
   {
     type: 'changed',
     checkType: (first, second, key) => (_.has(first, key) && _.has(second, key)
       && (first[key] !== second[key])),
-    processing: (first, second) => ({ before: first, after: second }),
+    processing: (first, second) => ({ value: { before: first, after: second } }),
   },
   {
     type: 'unchanged',
     checkType: (first, second, key) => (_.has(first, key) && _.has(second, key)
       && (first[key] === second[key])),
-    processing: (first) => _.identity(first),
+    processing: (first) => ({ value: _.identity(first) }),
   },
 ];
 
@@ -43,9 +43,7 @@ const buildDiffAST = (parsedData1, parsedData2) => _.union(
 
     const resultProc = processing(parsedData1[key], parsedData2[key], buildDiffAST);
 
-    return (type === 'grouped'
-      ? { name: key, type, children: resultProc }
-      : { name: key, type, value: resultProc });
+    return { name: key, type, ...resultProc };
   });
 
 export default buildDiffAST;
