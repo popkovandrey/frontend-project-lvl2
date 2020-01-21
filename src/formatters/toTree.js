@@ -1,37 +1,35 @@
-const leftIdent = '    ';
+const leftIndent = '    ';
 
-const prepareValue = (name, value, ident, prefix) => {
-  if (value instanceof Object) {
-    return [`${ident.slice(0, -2)}${prefix}${name}: {`,
-      `${ident}${leftIdent}${Object.keys(value)[0]}: ${Object.values(value)[0]}`,
-      `${ident}}`];
+const stringifyValue = (name, value, indent, prefix) => {
+  if (typeof value !== 'object') {
+    return `${indent.slice(0, -2)}${prefix}${name}: ${value}`;
   }
 
-  return [`${ident.slice(0, -2)}${prefix}${name}: ${value}`];
+  return [`${indent.slice(0, -2)}${prefix}${name}: {`,
+    `${indent}${leftIndent}${Object.keys(value)[0]}: ${Object.values(value)[0]}`,
+    `${indent}}`].join('\n');
 };
 
-const stringifyValue = (obj, depthIdent) => {
-  const ident = leftIdent.repeat(depthIdent);
+const valueIndent = (depth) => leftIndent.repeat(depth);
 
-  const mappingType = {
-    unchanged: prepareValue(obj.name, obj.value, ident, '  '),
-    added: prepareValue(obj.name, obj.value, ident, '+ '),
-    removed: prepareValue(obj.name, obj.value, ident, '- '),
-    changed: [
-      ...prepareValue(obj.name, obj.value.before, ident, '- '),
-      ...prepareValue(obj.name, obj.value.after, ident, '+ ')],
-  };
-
-  return mappingType[obj.type];
+const mappingNodeType = {
+  unchanged: ({ name, value }, depth) => stringifyValue(name, value, valueIndent(depth), '  '),
+  added: ({ name, value }, depth) => stringifyValue(name, value, valueIndent(depth), '+ '),
+  removed: ({ name, value }, depth) => stringifyValue(name, value, valueIndent(depth), '- '),
+  changed: ({ name, oldValue, newValue }, depth) => ([
+    stringifyValue(name, oldValue, valueIndent(depth), '- '),
+    stringifyValue(name, newValue, valueIndent(depth), '+ ')].join('\n')),
+  grouped: ({ name, children }, depth, func) => [`${valueIndent(depth)}${name}: {`,
+    func(children, depth + 1),
+    `${valueIndent(depth)}}`].join('\n'),
 };
 
 export default (ast) => {
-  const iter = (obj, acc, depthIdent) => (obj.type === 'grouped'
-    ? [...acc,
-      `${leftIdent.repeat(depthIdent)}${obj.name}: {`,
-      ...obj.children.reduce((iAcc, el) => iter(el, iAcc, depthIdent + 1), []),
-      `${leftIdent.repeat(depthIdent)}}`]
-    : [...acc, ...stringifyValue(obj, depthIdent)]);
+  const iter = (data, depth = 1) => data.map((node) => {
+    const output = mappingNodeType[node.type];
 
-  return ['{', ...ast.reduce((acc, obj) => iter(obj, acc, 1), []), '}'].join('\n');
+    return output(node, depth, iter);
+  }).join('\n');
+
+  return ['{', iter(ast), '}'].join('\n');
 };

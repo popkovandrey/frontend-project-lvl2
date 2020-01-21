@@ -1,21 +1,28 @@
-const stringifyValue = (obj, fullName) => {
-  const checkComplex = (value) => (value instanceof Object ? '[complex value]' : value);
-  const checkString = (value) => (typeof value === 'string' ? `'${value}'` : value);
+const mappingTypeValue = {
+  string: (value) => `'${value}'`,
+  boolean: (value) => value,
+  number: (value) => value,
+  object: () => '[complex value]',
+};
 
-  const mappingType = {
-    removed: `Property '${fullName}' was removed`,
-    unchanged: `Property '${fullName}' was not changed`,
-    added: `Property '${fullName}' was added with value: ${checkComplex(checkString(obj.value))}`,
-    changed: `Property '${fullName}' was updated. From ${checkComplex(checkString(obj.value.before))} to ${checkComplex(checkString(obj.value.after))}`,
-  };
+const getValue = (value) => mappingTypeValue[(typeof value)](value);
 
-  return [mappingType[obj.type]];
+const mappingNodeType = {
+  removed: ({ name }) => `Property '${name}' was removed`,
+  unchanged: ({ name }) => `Property '${name}' was not changed`,
+  added: ({ name, value }) => `Property '${name}' was added with value: ${getValue(value)}`,
+  changed: ({ name, oldValue, newValue }) => `Property '${name}' was updated. From ${getValue(oldValue)} to ${getValue(newValue)}`,
+  grouped: ({ name, children }, func) => func(children, `${name}.`),
 };
 
 export default (ast) => {
-  const iter = (obj, acc, parent) => (obj.type === 'grouped'
-    ? [...acc, ...obj.children.reduce((iAcc, el) => iter(el, iAcc, `${parent}${obj.name}.`), [])]
-    : [...acc, stringifyValue(obj, `${parent}${obj.name}`)]);
+  const iter = (data, parent = '') => data.map((node) => {
+    const output = mappingNodeType[node.type];
 
-  return [...ast.reduce((acc, obj) => iter(obj, acc, ''), [])].join('\n');
+    const fullName = `${parent}${node.name}`;
+
+    return output({ ...node, name: fullName }, iter);
+  }).join('\n');
+
+  return iter(ast);
 };

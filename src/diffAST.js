@@ -9,24 +9,24 @@ const listTypes = [
   {
     type: 'added',
     checkType: (first, second, key) => (!_.has(first, key) && _.has(second, key)),
-    processing: (first, second) => ({ value: _.identity(second) }),
+    processing: (first, second) => ({ value: second }),
   },
   {
     type: 'removed',
     checkType: (first, second, key) => (_.has(first, key) && !_.has(second, key)),
-    processing: (first) => ({ value: _.identity(first) }),
+    processing: (first) => ({ value: first }),
   },
   {
     type: 'changed',
     checkType: (first, second, key) => (_.has(first, key) && _.has(second, key)
       && (first[key] !== second[key])),
-    processing: (first, second) => ({ value: { before: first, after: second } }),
+    processing: (first, second) => ({ oldValue: first, newValue: second }),
   },
   {
     type: 'unchanged',
     checkType: (first, second, key) => (_.has(first, key) && _.has(second, key)
       && (first[key] === second[key])),
-    processing: (first) => ({ value: _.identity(first) }),
+    processing: (first) => ({ value: first }),
   },
 ];
 
